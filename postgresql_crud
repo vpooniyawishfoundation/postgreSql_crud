@@ -1,0 +1,51 @@
+import psycopg2
+
+databasename='vishnu'
+hostserver='localhost'
+pswd='9255'
+portvalue='5432'
+usernames='postgres'
+connection=None
+try:   
+    with psycopg2.connect(dbname=databasename,host=hostserver,password=pswd,port=portvalue,
+                            user=usernames) as connection:
+        # print("connection successfully")
+        with connection.cursor() as cur:
+            
+            #create table
+            script='''create table if not exists students(
+                roll_no serial primary key,
+                name varchar(255),
+                class varchar(255),
+                address varchar(255)) '''
+            cur.execute(script)
+            
+            # insert data
+            insert_query='insert into students (name,class,address) values (%s,%s,%s)'
+            insert_value=[('Vishnu','12th','palwalhekkfjj'),
+                          ('Sagar','Mca','delhi'),
+                          ('Ramesh','Bsc','ballabgarh')]
+            for record in insert_value:
+                cur.execute(insert_query,record)
+                
+            #delete data
+            delete_query=('delete from students where roll_no=2')
+            cur.execute(delete_query)
+            
+            
+            #update record
+            update_script= "UPDATE students SET name = 'Vishnu' WHERE roll_no=1"
+            cur.execute(update_script)
+            
+            
+            #retrieve record
+            fetch_data='select * from students'
+            cur.execute(fetch_data)
+            for data in cur.fetchall():
+                print(data)
+
+except Exception as err:
+    print(err)
+finally:
+    if connection is not None:
+        connection.close()
