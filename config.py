@@ -1,0 +1,5 @@
+databasename='vishnu'
+hostserver='localhost'
+pswd='9255'
+portvalue='5432'
+usernames='postgres'
